@@ -1,4 +1,4 @@
-    #!/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Chagging code for extend paper on 14/01/2022;
@@ -13,7 +13,7 @@ import pandas as pd
 from pathlib import Path
 from sklearn.metrics import f1_score
 from sklearn.naive_bayes import GaussianNB
-#from tensorflow import keras
+from tensorflow import keras
 import timeit
 
 start = timeit.default_timer()
@@ -42,11 +42,11 @@ def prepareData(data_df):
     return x, y
 
 print('Reading Train Dataframe...')
-train_df = pd.read_csv(Path('feature-dataframes/AugmPatLvDiv_TRAIN-AllFeats_1612-Features_6405-images.csv'), index_col=0)
+train_df = pd.read_csv(Path('feature-dataframes/AugmPatLvDiv_TRAIN-AllFeats_1612-Features_40000-images.csv'), index_col=0)
 print('Done Read Train Dataframe!')
 
 print('Reading Validation Dataframe...')
-valid_df = pd.read_csv(Path('feature-dataframes/PatLvDiv_TEST-AllFeats_1612-Features_607-images.csv'), index_col=0)
+valid_df = pd.read_csv(Path('feature-dataframes/PatLvDiv_TEST-AllFeats_1612-Features_1503-images.csv'), index_col=0)
 print('Done Read Validation Dataframe!')
 
 print('Preparing Data...')

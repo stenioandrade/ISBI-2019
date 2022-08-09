@@ -44,11 +44,11 @@ def prepareData(data_df):
     return x, y
 
 print('Reading Train Dataframe...')
-train_df = pd.read_csv(Path('feature-dataframes/AugmPatLvDiv_TRAIN-AllFeats_1612-Features_6405-images.csv'), index_col=0)
+train_df = pd.read_csv(Path('feature-dataframes/AugmPatLvDiv_TRAIN-AllFeats_1612-Features_40000-images.csv'), index_col=0)
 print('Done Read Train Dataframe!')
 
 print('Reading Validation Dataframe...')
-valid_df = pd.read_csv(Path('feature-dataframes/PatLvDiv_TEST-AllFeats_1612-Features_607-images.csv'), index_col=0)
+valid_df = pd.read_csv(Path('feature-dataframes/PatLvDiv_TEST-AllFeats_1612-Features_1503-images.csv'), index_col=0)
 print('Done Read Validation Dataframe!')
 
 print('Preparing Data...')
@@ -83,7 +83,7 @@ learning_rate = 0.001
 beta_1 = 0.97
 beta_2 = 0.97
 decay  = 0.05
-epochs = 250
+epochs = 150
 classificador = Sequential()
 classificador.add(Dense(units = neurons, activation = activation, 
                     kernel_initializer = kernel_initializer, input_shape = (x_train.shape[1],)))
@@ -114,7 +114,7 @@ previsoes = (previsoes > 0.5)
 precisao = f1_score(y_valid, previsoes)
 
 previsoes_saida = pd.DataFrame(previsoes)
-previsoes_saida.to_csv('rna_previsoes_%d_%d.csv' % (epochs, dropout*10) )
+previsoes_saida.to_csv('rna_previsoes.csv' )
 
 print('F1-Score: ', precisao)
 stop = timeit.default_timer()
