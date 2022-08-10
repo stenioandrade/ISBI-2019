@@ -225,7 +225,7 @@ def createDatasets(trainSize, validationSize):
         #Copy each patient cells into folder 'patLvDiv_train'
         for cellpath in pCells:
             shutil.copy2(cellpath, patLvDiv_train)
-            print(f'Copy {cellpath} TO {patLvDiv_train}/{cellpath.name}')
+            #print(f'Copy {cellpath} TO {patLvDiv_train}/{cellpath.name}')
 
     #For each Validation patient...
     for pId in validPat:
@@ -234,7 +234,7 @@ def createDatasets(trainSize, validationSize):
         #Copy each patient cells into folder 'patLvDiv_valid'
         for cellpath in pCells:
             shutil.copy2(cellpath, patLvDiv_valid)
-            print(f'Copy {cellpath} TO {patLvDiv_valid}/{cellpath.name}')
+            #print(f'Copy {cellpath} TO {patLvDiv_valid}/{cellpath.name}')
 
     #For each Test patient...
     for pId in testPat:
@@ -243,7 +243,7 @@ def createDatasets(trainSize, validationSize):
         #Copy each patient cells into folder 'patLvDiv_test'
         for cellpath in pCells:
             shutil.copy2(cellpath, patLvDiv_test)
-            print(f'Copy {cellpath} TO {patLvDiv_test}/{cellpath.name}')
+            #print(f'Copy {cellpath} TO {patLvDiv_test}/{cellpath.name}')
 
     
     """
@@ -311,19 +311,19 @@ def createDatasets(trainSize, validationSize):
     for cellpath in trainImgs:
         #Copy the image into folder 'rndDiv_train'
         shutil.copy2(cellpath, rndDiv_train)
-        print(f'Copy {cellpath} TO {rndDiv_train}/{cellpath.name}')
+        #print(f'Copy {cellpath} TO {rndDiv_train}/{cellpath.name}')
 
     #For each Validation image...
     for cellpath in validImgs:
         #Copy the image into folder 'rndDiv_valid'
         shutil.copy2(cellpath, rndDiv_valid)
-        print(f'Copy {cellpath} TO {rndDiv_valid}/{cellpath.name}')
+        #print(f'Copy {cellpath} TO {rndDiv_valid}/{cellpath.name}')
 
     #For each TEST image...
     for cellpath in testImgs:
         #Copy the image into folder 'rndDiv_test'
         shutil.copy2(cellpath, rndDiv_test)
-        print(f'Copy {cellpath} TO {rndDiv_test}/{cellpath.name}')
+        #print(f'Copy {cellpath} TO {rndDiv_test}/{cellpath.name}')
 
     #******************************************************************#
     #******************************************************************#
@@ -344,7 +344,7 @@ def createDatasets(trainSize, validationSize):
                 continue
             #Copy cell into 'augm_rndDiv_train' folder
             shutil.copy2(rndDiv_train/cellpath, augm_rndDiv_train)
-            print(f'Copy {rndDiv_train/cellpath} TO {augm_rndDiv_train}/{cellpath}')
+            #print(f'Copy {rndDiv_train/cellpath} TO {augm_rndDiv_train}/{cellpath}')
         
         #Read all cells in 'rndDiv_train' folder
         srcTrain = os.listdir(rndDiv_train)
@@ -392,7 +392,7 @@ def createDatasets(trainSize, validationSize):
                 continue
             #Copy cell into 'augm_rndDiv_valid' folder
             shutil.copy2(rndDiv_valid/cellpath, augm_rndDiv_valid)
-            print(f'Copy {rndDiv_valid/cellpath} TO {augm_rndDiv_valid}/{cellpath}')
+            #print(f'Copy {rndDiv_valid/cellpath} TO {augm_rndDiv_valid}/{cellpath}')
         
         #Read all cells in 'rndDiv_valid' folder
         srcValid = os.listdir(rndDiv_valid)
@@ -440,7 +440,7 @@ def createDatasets(trainSize, validationSize):
                 continue
             #Copy cell into 'augm_patLvDiv_train' folder
             shutil.copy2(patLvDiv_train/cellpath, augm_patLvDiv_train)
-            print(f'Copy {patLvDiv_train/cellpath} TO {augm_patLvDiv_train}/{cellpath}')
+            #print(f'Copy {patLvDiv_train/cellpath} TO {augm_patLvDiv_train}/{cellpath}')
 
         #Read all cells in 'patLvDiv_train' folder
         srcTrain = os.listdir(patLvDiv_train)
@@ -488,7 +488,7 @@ def createDatasets(trainSize, validationSize):
                 continue
             #Copy cell into 'augm_patLvDiv_valid' folder
             shutil.copy2(patLvDiv_valid/cellpath, augm_patLvDiv_valid)
-            print(f'Copy {patLvDiv_valid/cellpath} TO {augm_patLvDiv_valid}/{cellpath}')
+            #print(f'Copy {patLvDiv_valid/cellpath} TO {augm_patLvDiv_valid}/{cellpath}')
 
         #Read all cells in 'patLvDiv_valid' folder
         srcValid = os.listdir(patLvDiv_valid)
