@@ -108,21 +108,25 @@ def genAugmentedImage(srcImg):
     height, width, _ = augm.shape
     rotationMatrix = cv2.getRotationMatrix2D((width/2,height/2), theta ,1)
     augm = cv2.warpAffine(augm, rotationMatrix,(width, height))
+    augmName = "FlipRotation"
     #Aditional Augmentation
     rnd = np.random.uniform(0.0, 1.0)
     #25% Only Flip+Rotation
     if rnd < 0.25:
-        return augm
+        return augm, augmName
     #25% Flip+Rotation+Shear
     if rnd >= 0.25 and rnd < 0.50:
         augm = shearImage(augm, s=(0.1, 0.35))
+        augmName += "Shear"
     #25% Flip+Rotation+PepperSalt
     if rnd >= 0.50 and rnd < 0.75:
         augm = saltPepperNoise(augm, salt_vs_pepper=0.50, amount = 0.02)
+        augmName += "PepperSalt"
     #25% Flip+GaussianBlur
     if rnd >= 0.75:
         augm = cv2.GaussianBlur(augm,(5,5),0)
-    return augm
+        augmName += "GaussianBlur"
+    return augm, augmName
 
 def createDatasets(trainSize, validationSize):
     rndDiv_train = Path('data/rndDiv_train/')
@@ -343,8 +347,8 @@ def createDatasets(trainSize, validationSize):
             else:
                 continue
             #Copy cell into 'augm_rndDiv_train' folder
-            shutil.copy2(rndDiv_train/cellpath, augm_rndDiv_train)
-            print(f'Copy {rndDiv_train/cellpath} TO {augm_rndDiv_train}/{cellpath}')
+            shutil.copy(rndDiv_train/cellpath, f'{augm_rndDiv_train}/{"Original"}_{cellpath}')
+            print(f'Copy {rndDiv_train/cellpath} TO {augm_rndDiv_train}/{"Original"}_{cellpath}')
         
         #Read all cells in 'rndDiv_train' folder
         srcTrain = os.listdir(rndDiv_train)
@@ -364,9 +368,9 @@ def createDatasets(trainSize, validationSize):
                 continue
             #Create an augmented cell based on randomly choose from 'rndDiv_train' folder
             img = rndDiv_train / rndChoice
-            img = genAugmentedImage(cv2.imread(str(img)))
+            img, augmName = genAugmentedImage(cv2.imread(str(img)))
             #Save the augmented image into folder 'augm_rndDiv_train'
-            savePath = augm_rndDiv_train / f'AugmentedImg_{np.random.randint(1001, 9999)}_{rndChoice}'
+            savePath = augm_rndDiv_train / f'AugmentedImg_{augmName}_{np.random.randint(1001, 9999)}_{rndChoice}'
             if not os.path.isfile(savePath):
                 cv2.imwrite(str(savePath), img)
                 print(f'Created {savePath}')
@@ -391,7 +395,7 @@ def createDatasets(trainSize, validationSize):
             else:
                 continue
             #Copy cell into 'augm_rndDiv_valid' folder
-            shutil.copy2(rndDiv_valid/cellpath, augm_rndDiv_valid)
+            shutil.copy2(rndDiv_valid/cellpath, f'{augm_rndDiv_valid}/{"Original"}_{cellpath}')
             print(f'Copy {rndDiv_valid/cellpath} TO {augm_rndDiv_valid}/{cellpath}')
         
         #Read all cells in 'rndDiv_valid' folder
@@ -412,9 +416,9 @@ def createDatasets(trainSize, validationSize):
                 continue
             #Create an augmented cell based on randomly choose from 'rndDiv_valid' folder
             img = rndDiv_valid / rndChoice
-            img = genAugmentedImage(cv2.imread(str(img)))
+            img, augmName = genAugmentedImage(cv2.imread(str(img)))
             #Save the augmented image into folder 'augm_rndDiv_valid'
-            savePath = augm_rndDiv_valid / f'AugmentedImg_{np.random.randint(1001, 9999)}_{rndChoice}'
+            savePath = augm_rndDiv_valid / f'AugmentedImg_{augmName}_{np.random.randint(1001, 9999)}_{rndChoice}'
             if not os.path.isfile(savePath):
                 cv2.imwrite(str(savePath), img)
                 print(f'Created {savePath}')
@@ -439,8 +443,8 @@ def createDatasets(trainSize, validationSize):
             else:
                 continue
             #Copy cell into 'augm_patLvDiv_train' folder
-            shutil.copy2(patLvDiv_train/cellpath, augm_patLvDiv_train)
-            print(f'Copy {patLvDiv_train/cellpath} TO {augm_patLvDiv_train}/{cellpath}')
+            shutil.copy2(patLvDiv_train/cellpath, f'{augm_patLvDiv_train}/{"Original"}_{cellpath}')
+            print(f'Copy {patLvDiv_train/cellpath} TO {augm_patLvDiv_train}/{"Original"}_{cellpath}')
 
         #Read all cells in 'patLvDiv_train' folder
         srcTrain = os.listdir(patLvDiv_train)
@@ -460,9 +464,9 @@ def createDatasets(trainSize, validationSize):
                 continue
             #Create an augmented cell based on randomly choose from 'patLvDiv_train' folder
             img = patLvDiv_train / rndChoice
-            img = genAugmentedImage(cv2.imread(str(img)))
+            img, augmName = genAugmentedImage(cv2.imread(str(img)))
             #Save the augmented image into folder 'augm_patLvDiv_train'
-            savePath = augm_patLvDiv_train / f'AugmentedImg_{np.random.randint(1001, 9999)}_{rndChoice}'
+            savePath = augm_patLvDiv_train / f'AugmentedImg_{augmName}_{np.random.randint(1001, 9999)}_{rndChoice}'
             if not os.path.isfile(savePath):
                 cv2.imwrite(str(savePath), img)
                 print(f'Created {savePath}')
@@ -487,7 +491,7 @@ def createDatasets(trainSize, validationSize):
             else:
                 continue
             #Copy cell into 'augm_patLvDiv_valid' folder
-            shutil.copy2(patLvDiv_valid/cellpath, augm_patLvDiv_valid)
+            shutil.copy2(patLvDiv_valid/cellpath, f'{augm_patLvDiv_valid}/{"Original"}_{cellpath}')
             print(f'Copy {patLvDiv_valid/cellpath} TO {augm_patLvDiv_valid}/{cellpath}')
 
         #Read all cells in 'patLvDiv_valid' folder
@@ -508,9 +512,9 @@ def createDatasets(trainSize, validationSize):
                 continue
             #Create an augmented cell based on randomly choose from 'patLvDiv_valid' folder
             img = patLvDiv_valid / rndChoice
-            img = genAugmentedImage(cv2.imread(str(img)))
+            img, augmName = genAugmentedImage(cv2.imread(str(img)))
             #Save the augmented image into folder 'augm_patLvDiv_valid'
-            savePath = augm_patLvDiv_valid / f'AugmentedImg_{np.random.randint(1001, 9999)}_{rndChoice}'
+            savePath = augm_patLvDiv_valid / f'AugmentedImg_{augmName}_{np.random.randint(1001, 9999)}_{rndChoice}'
             if not os.path.isfile(savePath):
                 cv2.imwrite(str(savePath), img)
                 print(f'Created {savePath}')
@@ -522,10 +526,10 @@ def createDatasets(trainSize, validationSize):
                     countHEM -= 1
 
     #Create Augmented Datasets
-    pTrain1 = multiprocessing.Process(name='Train1 Augm', target=createAugm_rndDiv_train)
-    pValid1 = multiprocessing.Process(name='Validation1 Augm', target=createAugm_rndDiv_valid)
-    pTrain2 = multiprocessing.Process(name='Train2 Augm', target=createAugm_patLvDiv_train)
-    pValid2 = multiprocessing.Process(name='Validation2 Augm', target=createAugm_patLvDiv_valid)
+    pTrain1 = multiprocessing.Process(name='Train1 Augm', target=createAugm_rndDiv_train())
+    pValid1 = multiprocessing.Process(name='Validation1 Augm', target=createAugm_rndDiv_valid())
+    pTrain2 = multiprocessing.Process(name='Train2 Augm', target=createAugm_patLvDiv_train())
+    pValid2 = multiprocessing.Process(name='Validation2 Augm', target=createAugm_patLvDiv_valid())
     pTrain1.start()
     pValid1.start()
     pTrain2.start()
@@ -566,6 +570,7 @@ def folderData(folderPath):
 if __name__ == '__main__':
     #createDatasets(trainSize=20000, validationSize=5000)
 
-    createDatasets(trainSize=200, validationSize=50) #Sample Data
+    trainSize = 10000
+    createDatasets(trainSize=trainSize, validationSize=trainSize/4) #Sample Data
     print(f"\nEnd Script!\n{'#'*50}")
 
