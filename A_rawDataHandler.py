@@ -90,6 +90,18 @@ def getIdsHEMPatients():
             ret.append(pId)
     return ret
 
+def getAugmentationAppliedName(imgName):
+    if imgName.stem.split('_')[0] == 'AugmentedImg':
+        return imgName.stem.split('_')[1]
+    else:
+        return imgName.stem.split('_')[0]
+
+def getPatientId(imgName):
+    if imgName.stem.split('_')[0] == 'AugmentedImg':
+        return imgName.stem.split('_')[4]
+    else:
+        return imgName.stem.split('_')[2]
+
 patients = {}
 allTrainImgs = trainPath.glob('*/*/*/*.bmp')# fold_[0,1,2]/[all,hem]/*bmp
 

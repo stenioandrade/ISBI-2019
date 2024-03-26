@@ -12,6 +12,7 @@ import SimpleITK as sitk
 from scipy.spatial import distance
 from scipy.signal import resample
 import timeit
+from A_rawDataHandler import getPatientId, getAugmentationAppliedName
 
 start = timeit.default_timer()
 
@@ -569,7 +570,15 @@ def extractFeatureDict(targetImgPath):
     dctFeats.pop('cellType(ALL=1, HEM=-1)')
 
     featuresDict['cellType(ALL=1, HEM=-1)'] = cellType
-    return {**featuresDict, **fofFeats, **textFeats, **morphFeats, **contourFeats, **dctFeats}
+
+    #Coluna que indica o Id do paciente
+    patientIdDict = {'PatientId': getPatientId(targetImgPath)}
+
+    #Coluna que indica qual filtro foi aplicado na Augmentation, caso nenhum tenha sido aplicado, fica como 'Original'
+    augmentationAppliedDict = {'AugmentationApplied': getAugmentationAppliedName(targetImgPath)}
+
+    return {**featuresDict, **patientIdDict, **augmentationAppliedDict, **fofFeats, **textFeats, **morphFeats,
+            **contourFeats, **dctFeats}
 
 
 #############################################################################################################################################################################
@@ -631,9 +640,14 @@ def createAugmPatLvDivDataframe():
         test_df = test_df[cols]
         test_df.to_csv(f'feature-dataframes/PatLvDiv_TEST-AllFeats_{test_df.shape[1]-1}-Features_{test_df.shape[0]}-images.csv')
     
-    p0 = multiprocessing.Process(name='train_AugmPatLvDiv', target=createTrainDataframe)
-    p1 = multiprocessing.Process(name='valid_AugmPatLvDiv',target=createValidDataframe)
-    p2 = multiprocessing.Process(name='test_PatLvDiv',target=createTestDataframe)
+
+    isExist = os.path.exists('feature-dataframes')
+    if not isExist:
+        os.makedirs('feature-dataframes')
+
+    p0 = multiprocessing.Process(name='train_AugmPatLvDiv', target=createTrainDataframe())
+    p1 = multiprocessing.Process(name='valid_AugmPatLvDiv',target=createValidDataframe())
+    p2 = multiprocessing.Process(name='test_PatLvDiv',target=createTestDataframe())
     p0.start()
     p1.start()
     p2.start()
@@ -641,10 +655,11 @@ def createAugmPatLvDivDataframe():
     p1.join()
     p2.join()
 
-p0 = multiprocessing.Process(name='AugmPatLvDiv', target=createAugmPatLvDivDataframe)
-p0.start()
-p0.join()
-print(f"\nEnd Script!\n{'#'*50}")
+if __name__ == '__main__':
+    p0 = multiprocessing.Process(name='AugmPatLvDiv', target=createAugmPatLvDivDataframe())
+    p0.start()
+    p0.join()
+    print(f"\nEnd Script!\n{'#'*50}")
 
-stop = timeit.default_timer()
-print('Time: ', stop - start)  
+    stop = timeit.default_timer()
+    print('Time: ', stop - start)
